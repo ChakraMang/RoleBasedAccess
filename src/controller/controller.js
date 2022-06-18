@@ -37,7 +37,7 @@ const create = async function(req,res){
     }
     // converting password into encrypted form;
     userDetails.password = await bcrypt.hash(password, saltRound);
-    let userCreated = await user.save(userDetails);
+    let userCreated = await user.create(userDetails);
     return res.status(201).send({"status":true,"msg":"User created successfully"});
 }
 
@@ -69,7 +69,7 @@ const login = async function(req,res){
 }
 
 const read = async function(req,res){
-    const objectId = req.query.userId;
+    const objectId = req.params.userId;
     if(!ObjectId.isValid(objectId)){
         return res.status(400).send({"status":false,"msg":"ObjectId is not valid"});
     };
@@ -84,7 +84,7 @@ const update = async function(req,res){
         return res.status(400).send({status:false,msg : "Enter the details if you want to update"})
     }
     const {name,email,password,role} = req.body;
-    const userId = req.query.userId;
+    const userId = req.params.userId;
     if(!ObjectId.isValid(userId)){
         return res.status(400).send({status:false,msg:"ObjectId is not valid"})
     }
@@ -129,7 +129,6 @@ const update = async function(req,res){
     return res.status(200).send({status:true,msg:"details updated successfully"})
 
 }
-
 
 
 module.exports.create = create;
